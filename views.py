@@ -76,7 +76,7 @@ def multi_submit_start(request):
 
             # If the filename contains non ascii generate a unique name
             if not all(ord(c) < 128 for c in filename):
-              filename = unicode(uuid.uuid4()) + splitext(filename)[-1]
+              filename = str(uuid.uuid4()) + splitext(filename)[-1]
 
             # Sniff the submitted media to determine which
             # media plugin should handle processing
@@ -85,14 +85,14 @@ def multi_submit_start(request):
 
             # create entry and save in database
             entry = new_upload_entry(request.user)
-            entry.media_type = unicode(media_type)
+            entry.media_type = str(media_type)
             entry.title = (
-              unicode(submit_form.title.data)
-              or unicode(splitext(submitted_file.filename)[0]))
+              str(submit_form.title.data)
+              or str(splitext(submitted_file.filename)[0]))
 
-            entry.description = unicode(submit_form.description.data)
+            entry.description = str(submit_form.description.data)
 
-            entry.license = unicode(submit_form.license.data) or None
+            entry.license = str(submit_form.license.data) or None
 
             # Process the user's folksonomy "tags"
             entry.tags = convert_to_tag_list_of_dicts(
